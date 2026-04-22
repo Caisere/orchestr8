@@ -33,6 +33,29 @@ export const EmailEnvSchema = z.object({
   RESEND_API_KEY: z.string().min(1),
 })
 
+// Sentry — validated when sentry config is imported
+export const SentryEnvSchema = z.object({
+  SENTRY_DSN: z.url(),
+  NEXT_PUBLIC_SENTRY_DSN: z.url(),
+})
+
+// Inngest — validated when inngest client is imported
+export const InngestEnvSchema = z.discriminatedUnion("NODE_ENV", [
+  z.object({
+    NODE_ENV: z.literal("development"),
+    INNGEST_DEV: z.literal("1"),
+  }),
+  z.object({
+    NODE_ENV: z.literal("production"),
+    INNGEST_SIGNING_KEY: z.string().min(1),
+    INNGEST_EVENT_KEY: z.string().min(1),
+  }),
+  z.object({
+    NODE_ENV: z.literal("test"),
+    INNGEST_DEV: z.literal("1"),
+  }),
+])
+
 // AI providers — validated when inngest functions are imported
 export const AIEnvSchema = z.object({
   OPENAI_API_KEY: z.string().min(1),
@@ -43,6 +66,8 @@ export const AIEnvSchema = z.object({
 export type CoreEnv = z.infer<typeof CoreEnvSchema>
 export type BetterAuthEnv = z.infer<typeof BetterAuthEnvSchema>
 export type EmailEnv = z.infer<typeof EmailEnvSchema>
+export type SentryEnv = z.infer<typeof SentryEnvSchema>
+export type InngestEnv = z.infer<typeof InngestEnvSchema>
 export type AIEnv = z.infer<typeof AIEnvSchema>
 
 const { data: coreEnv, error } = CoreEnvSchema.safeParse(process.env)

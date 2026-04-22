@@ -20,14 +20,32 @@ export const execute = inngest.createFunction(
       step.ai.wrap("ask-openai", generateText, {
         model: openai("gpt-4o-mini"),
         prompt: question,
+        experimental_telemetry: {
+          isEnabled: true,
+          functionId: "ask-openai",
+          recordInputs: true,
+          recordOutputs: true,
+        },
       }),
       step.ai.wrap("ask-gemini", generateText, {
         model: google("gemini-2.5-flash"),
         prompt: question,
+        experimental_telemetry: {
+          isEnabled: true,
+          functionId: "ask-gemini",
+          recordInputs: true,
+          recordOutputs: true,
+        },
       }),
       step.ai.wrap("ask-anthropic", generateText, {
         model: anthropic("claude-sonnet-4-6"),
         prompt: question,
+        experimental_telemetry: {
+          isEnabled: true,
+          functionId: "ask-anthropic",
+          recordInputs: true,
+          recordOutputs: true,
+        },
       }),
     ]);
 
